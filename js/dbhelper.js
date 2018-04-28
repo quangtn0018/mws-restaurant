@@ -11,15 +11,60 @@ class DBHelper {
 		return `http://localhost:${port}`;
 	}
 
+	static readDB(callback) {
+		let request = window.indexedDB.open('restaurant-review-db', 1);
+
+		request.onsuccess = (event) => {
+			var db = event.target.result;
+			var tx = db.transaction('keyval');
+			var keyValStore = tx.objectStore('keyval');
+
+			keyValStore.get('restaurants').onsuccess = function(event) {
+				// data is in db
+				if (event.target.result) {
+					debugger;
+					callback(null, event.target.result);
+				} else {
+					DBHelper.fetchRestaurantsFromServer(callback);
+				}
+			};
+		};
+
+		request.onerror = function(event) {
+			console.log('failed to open indexedDB in readDB');
+		};
+	}
+
+	static addToDB(data) {
+		let request = window.indexedDB.open('restaurant-review-db', 1);
+
+		request.onsuccess = (event) => {
+			var db = event.target.result;
+			var tx = db.transaction('keyval', 'readwrite');
+			var keyValStore = tx.objectStore('keyval');
+			keyValStore.put(data, 'restaurants');
+		};
+
+		request.onerror = function(event) {
+			console.log('failed to open indexedDB in addToDB');
+		};
+	}
+
+	static fetchRestaurantsFromServer(callback) {
+		fetch(`${DBHelper.DATABASE_URL}/restaurants`)
+			.then((response) => response.json())
+			.then((restaurants) => {
+				DBHelper.addToDB(restaurants);
+				callback(null, restaurants);
+			})
+			.catch((error) => callback(error, null));
+	}
+
 	/**
    * Fetch all restaurants.
    */
 	static fetchRestaurants(callback) {
-		// using fetch api
-		fetch(`${DBHelper.DATABASE_URL}/restaurants`)
-			.then((response) => response.json())
-			.then((data) => callback(null, data))
-			.catch((error) => callback(error, null));
+		DBHelper.readDB(callback);
 	}
 
 	/**

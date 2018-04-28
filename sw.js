@@ -16,7 +16,8 @@ var urlsToCache = [
 	'/img/10.jpg',
 	'/js/dbhelper.js',
 	'/js/main.js',
-	'/js/restaurant_info.js'
+	'/js/restaurant_info.js',
+	'/js/idb.js'
 ];
 
 self.addEventListener('install', (event) => {

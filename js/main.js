@@ -5,6 +5,7 @@ var markers = [];
 // register service worker
 if (navigator.serviceWorker) {
 	window.addEventListener('load', () => {
+		openDB();
 		navigator.serviceWorker.register('/sw.js').then(
 			(registration) => {
 				// Registration was successful
@@ -18,10 +19,32 @@ if (navigator.serviceWorker) {
 	});
 }
 
+openDB = () => {
+	if (!window.indexedDB) {
+		window.alert(
+			"Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available."
+		);
+	}
+
+	let request = window.indexedDB.open('restaurant-review-db', 1);
+
+	request.onupgradeneeded = function(event) {
+		// The database did not previously exist, so create object stores and indexes.
+		var db = event.target.result;
+		var keyValStore = db.createObjectStore('keyval');
+		console.log('created object store in openDB');
+	};
+
+	request.onerror = function(event) {
+		console.log('failed to open indexedDB openDB');
+	};
+};
+
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+	openDB();
 	fetchNeighborhoods();
 	fetchCuisines();
 });
