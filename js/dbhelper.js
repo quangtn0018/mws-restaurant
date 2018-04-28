@@ -22,7 +22,6 @@ class DBHelper {
 			keyValStore.get('restaurants').onsuccess = function(event) {
 				// data is in db
 				if (event.target.result) {
-					debugger;
 					callback(null, event.target.result);
 				} else {
 					DBHelper.fetchRestaurantsFromServer(callback);
