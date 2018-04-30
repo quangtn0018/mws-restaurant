@@ -1,0 +1,27 @@
+{
+	"name": "mws-restaurant",
+	"version": "1.0.0",
+	"description": "--- #### _Three Stage Course Material Project - Restaurant Reviews_",
+	"main": "",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/quangtn0018/mws-restaurant.git"
+	},
+	"author": "Quang Nguyen",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/quangtn0018/mws-restaurant/issues"
+	},
+	"homepage": "https://github.com/quangtn0018/mws-restaurant#readme",
+	"devDependencies": {
+		"browser-sync": "^2.23.7",
+		"gulp": "^4.0.0",
+		"gulp-autoprefixer": "^5.0.0",
+		"gulp-imagemin": "^4.1.0",
+		"gulp-sass": "^4.0.1",
+		"imagemin-pngquant": "^5.1.0"
+	}
+}
