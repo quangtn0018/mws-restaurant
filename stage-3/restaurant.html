@@ -49,6 +49,27 @@
       <section id="reviews-container">
         <ul id="reviews-list"></ul>
       </section>
+
+      <section id="comment-container">
+        <h3>Comment</h3>
+        <form id="comment-form" action="">
+          <div id="comment-name">
+            <label for="user-name">Name: </label>
+            <input aria-label="User Name" id="user-name" name="name" type="text" placeholder="your name">
+          </div>
+          <div id="comment-rating">
+            <label for="user-rating">Rating: </label>
+            <input aria-label="User Rating" id="user-rating" name="rating" type="number" placeholder="your rating" min="0" max="15">
+          </div>
+          <div id="comment-textarea">
+            <label for="user-comment">Comment: </label>            
+            <textarea aria-label="User Comment" id="user-comment" name="comment" placeholder="your comment"></textarea>
+          </div>
+          <div id="comment-submit-button">
+            <button aria-label="Submit Comment" type="submit" onclick="alert('Submit Button!')">Submit</button>
+          </div>
+        </form>
+      </section>
       <!-- End reviews -->
     </div>
   </main>
@@ -61,7 +82,8 @@
   <!-- End footer -->
 
   <!-- Beginning scripts -->
-  <script type="application/javascript" charset="utf-8" src="js/dbhelper-minified.js"></script>  
+  <!-- TODO: minify dbhelper for lighthouse -->
+  <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>  
   <script type="text/javascript" src="js/restaurant_info.js"></script>
   <!-- Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtQNoeWMkxi50vJp3FOOFKDp2G-knG2wM&libraries=places&callback=initMap"></script>

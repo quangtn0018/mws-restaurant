@@ -258,12 +258,14 @@ nav h1 a {
 	width: 100%;
 }
 #restaurant-container,
-#reviews-container {
+#reviews-container,
+#comment-container {
 	border-bottom: 1px solid #d9d9d9;
 	border-top: 1px solid #fff;
 	padding: 20px 40px 30px;
 }
-#reviews-container h3 {
+#reviews-container h3,
+#comment-container h3 {
 	color: #f58500;
 	font-size: 24pt;
 	font-weight: 300;
@@ -321,6 +323,39 @@ nav h1 a {
 	text-transform: uppercase;
 	letter-spacing: 2px;
 }
+
+#comment-container {
+	padding-bottom: 80px;
+
+	#comment-form {
+		#comment-name,
+		#comment-rating,
+		#comment-textarea {
+			margin-bottom: 10px;
+		}
+
+		#user-comment {
+			height: 200px;
+		}
+
+		input,
+		textarea {
+			padding: 10px;
+			font-size: 10pt;
+		}
+
+		button {
+			height: 30px;
+		}
+
+		input,
+		textarea,
+		button {
+			border: 1px solid;
+			border-radius: 5px;
+		}
+	}
+}
 /* ====================== Breakpoints ====================== */
 @media screen and (max-width: 1100px) {
 	.inside #maincontent {
@@ -331,7 +366,7 @@ nav h1 a {
 		padding: 20px 40px 30px;
 	}
 	#reviews-container {
-		padding: 30px 40px 80px;
+		padding: 30px 40px 10px;
 	}
 
 	.inside #map-container {
@@ -367,5 +402,67 @@ nav h1 a {
 @media screen and (min-width: 1020px) {
 	#restaurants-list li {
 		width: 900px;
+	}
+}
+
+@media screen and (max-width: 700px) {
+	#comment-container {
+		#comment-form {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+
+			div {
+				flex: 1;
+
+				input,
+				textarea,
+				button {
+					width: 100%;
+				}
+
+				button {
+					margin-left: 10px;
+				}
+			}
+		}
+	}
+}
+
+@media screen and (min-width: 701px) {
+	#comment-container {
+		#comment-form {
+			width: 100%;
+			// display: flex;
+
+			#comment-name,
+			#comment-rating,
+			#comment-textarea,
+			#comment-submit-button {
+				display: flex;
+			}
+
+			#comment-name,
+			#comment-rating {
+				input {
+					width: 80%;
+				}
+				justify-content: space-between;
+			}
+
+			#comment-textarea {
+				#user-comment {
+					width: 80%;
+				}
+				justify-content: space-between;
+			}
+
+			#comment-submit-button {
+				justify-content: flex-end;
+			}
+			button {
+				width: 100px;
+			}
+		}
 	}
 }

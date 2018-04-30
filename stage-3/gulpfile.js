@@ -13,7 +13,7 @@ gulp.task('default', () => {
 	gulp.watch('sass/**/*.scss', gulp.parallel('styles'));
 });
 
-gulp.task('styles', () => {
+gulp.task('styles', (done) => {
 	gulp
 		.src('sass/**/*.scss')
 		.pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
@@ -24,4 +24,6 @@ gulp.task('styles', () => {
 		)
 		.pipe(gulp.dest('./css'))
 		.pipe(browserSync.stream());
+
+	done();
 });
