@@ -72,6 +72,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	}
 	// fill reviews
 	fillReviewsHTML();
+	fillCommentRestaurantID();
 };
 
 /**
@@ -173,3 +174,8 @@ getParameterByName = (name, url) => {
 	if (!results[2]) return '';
 	return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
+
+fillCommentRestaurantID = (id = self.restaurant.id) => {
+	const restaurantID = document.getElementById('restaurant-id');
+	restaurantID.value = id;
+}
