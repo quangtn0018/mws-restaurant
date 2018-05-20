@@ -206,7 +206,6 @@ postComment = (id = self.restaurant.id) => {
 	data.append('rating', rating);
 	data.append('comment', comment);
 
-	// TODO: post reviews after connection is back online
 	if (!navigator.onLine) {
 		const review = {
 			restaurant_id,

@@ -32,14 +32,6 @@ updateOnlineStatus = (event) => {
 window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
 
-window.addEventListener('sync', function(event) {
-	debugger
-	if (event.tag == 'syncOfflineComments') {
-		debugger;
-		event.waitUntil(DBHelper.syncOfflineComments());
-	}
-});
-
 openDB = () => {
 	if (!window.indexedDB) {
 		window.alert(

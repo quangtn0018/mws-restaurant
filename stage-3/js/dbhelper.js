@@ -127,14 +127,6 @@ class DBHelper {
 	 * also fetches reviews and add to restaurants accordingly
 	 */
 	static fetchRestaurantsFromServer(callback) {
-		// fetch(`${DBHelper.DATABASE_URL}/restaurants`)
-		// 	.then((response) => response.json())
-		// 	.then((restaurants) => {
-		// 		DBHelper.addToDB(restaurants);
-		// 		callback(null, restaurants);
-		// 	})
-		// 	.catch((error) => callback(error, null));
-
 		const fetchReviews = fetch(`${DBHelper.DATABASE_URL}/reviews`);
 		const fetchRestaurants = fetch(`${DBHelper.DATABASE_URL}/restaurants`);
 
