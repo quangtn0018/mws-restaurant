@@ -1,3 +1,5 @@
+importScripts('./js/idb.js');
+
 var staticCacheName = 'restaurant-reviews-v1';
 var urlsToCache = [
 	'/',
@@ -14,8 +16,8 @@ var urlsToCache = [
 	'/img/8.jpg',
 	'/img/9.jpg',
 	'/img/10.jpg',
-	'/js/dbhelper-minified.js',
-	'/js/main-minified.js',
+	'/js/dbhelper.js',
+	'/js/main.js',
 	'/js/restaurant_info.js'
 ];
 
@@ -55,3 +57,47 @@ self.addEventListener('fetch', (event) => {
 		})
 	);
 });
+
+self.addEventListener('sync', function(event) {
+	if (event.tag == 'syncOfflineComments') {
+		event.waitUntil(syncOfflineComments());
+	}
+});
+
+syncOfflineComments = () => {
+	idb
+		.open('restaurant-review-db', 1)
+		.then((db) => {
+			const tx = db.transaction('keyval', 'readonly');
+			const keyValStore = tx.objectStore('keyval');
+			return keyValStore.get('offlineReviews');
+		})
+		.then((offlineReviews) => {
+			if (!offlineReviews) return;
+
+			const fetchesArray = offlineReviews.map((review) => {
+				let data = new FormData();
+				data.append('restaurant_id', review.restaurant_id);
+				data.append('name', review.name);
+				data.append('rating', review.rating);
+				data.append('comment', review.comment);
+
+				return fetch('http://localhost:1337/reviews/', {
+					method: 'post',
+					body: data
+				});
+			});
+
+			Promise.all(fetchesArray).then((_) => {
+				idb
+					.open('restaurant-review-db', 1)
+					.then((db) => {
+						const tx = db.transaction('keyval', 'readwrite');
+						const keyValStore = tx.objectStore('keyval');
+						keyValStore.put(null, 'offlineReviews');
+						return tx.complete;
+					})
+					.then(() => console.log('Done syncing offline comments!'));
+			});
+		});
+};

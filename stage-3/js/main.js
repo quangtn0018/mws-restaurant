@@ -5,7 +5,6 @@ var markers = [];
 // register service worker
 if (navigator.serviceWorker) {
 	window.addEventListener('load', () => {
-		openDB();
 		navigator.serviceWorker.register('/sw.js').then(
 			(registration) => {
 				// Registration was successful
@@ -16,8 +15,30 @@ if (navigator.serviceWorker) {
 				console.log('ServiceWorker registration failed: ', err);
 			}
 		);
+
+		navigator.serviceWorker.ready.then(function(swRegistration) {
+			return swRegistration.sync.register('syncOfflineComments');
+		});
 	});
 }
+
+updateOnlineStatus = (event) => {
+	const condition = navigator.onLine ? 'online' : 'offline';
+	let status = document.getElementById('connection-status');
+
+	status.innerHTML = `Currently ${condition}`;
+};
+
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+
+window.addEventListener('sync', function(event) {
+	debugger
+	if (event.tag == 'syncOfflineComments') {
+		debugger;
+		event.waitUntil(DBHelper.syncOfflineComments());
+	}
+});
 
 openDB = () => {
 	if (!window.indexedDB) {
@@ -44,6 +65,7 @@ openDB = () => {
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+	updateOnlineStatus();
 	openDB();
 	fetchNeighborhoods();
 	fetchCuisines();

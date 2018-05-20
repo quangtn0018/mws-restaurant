@@ -1,6 +1,20 @@
 let restaurant;
 var map;
 
+updateOnlineStatus = (event) => {
+	const condition = navigator.onLine ? 'online' : 'offline';
+	let status = document.getElementById('connection-status');
+
+	status.innerHTML = `Currently ${condition}`;
+};
+
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+
+document.addEventListener('DOMContentLoaded', (event) => {
+	updateOnlineStatus();
+});
+
 /**
  * Initialize Google map, called from HTML.
  */
@@ -178,4 +192,40 @@ getParameterByName = (name, url) => {
 fillCommentRestaurantID = (id = self.restaurant.id) => {
 	const restaurantID = document.getElementById('restaurant-id');
 	restaurantID.value = id;
-}
+};
+
+postComment = (id = self.restaurant.id) => {
+	const restaurant_id = id;
+	const name = document.getElementById('user-name').value;
+	const rating = document.getElementById('user-rating').value;
+	const comment = document.getElementById('user-comment').value;
+
+	let data = new FormData();
+	data.append('restaurant_id', restaurant_id);
+	data.append('name', name);
+	data.append('rating', rating);
+	data.append('comment', comment);
+
+	// TODO: post reviews after connection is back online
+	if (!navigator.onLine) {
+		const review = {
+			restaurant_id,
+			name,
+			rating,
+			comment,
+			createdAt: new Date()
+		};
+
+		DBHelper.addToDBOffline(review);
+		return;
+	}
+	// when user is online
+	fetch('http://localhost:1337/reviews/', {
+		method: 'post',
+		body: data
+	}).then((_) => {
+		// set "restaurants" to null so indexDB can be updated with new comment
+		DBHelper.clearDB();
+		window.location.href = `http://localhost:3000/restaurant.html?id=${id}`;
+	});
+};
