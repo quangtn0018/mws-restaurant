@@ -8,7 +8,9 @@
   <!-- Normalize.css for better cross-browser consistency -->
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <!-- Main CSS file -->
-  <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <!-- <link rel="stylesheet" href="css/styles.css" type="text/css"> -->
+  <link rel="preload" as="style" href="css/styles.css" onload="this.rel='stylesheet'">
+
   <title>Restaurant Info</title>
 </head>
 
@@ -91,7 +93,8 @@
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>  
   <script type="text/javascript" src="js/restaurant_info.js"></script>
   <!-- Google Maps -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtQNoeWMkxi50vJp3FOOFKDp2G-knG2wM&libraries=places&callback=initMap"></script>
+  <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtQNoeWMkxi50vJp3FOOFKDp2G-knG2wM&libraries=places&callback=initMap"></script> -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"></script>
   
   <!-- End scripts -->
 

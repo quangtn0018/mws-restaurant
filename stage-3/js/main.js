@@ -53,6 +53,29 @@ openDB = () => {
 	};
 };
 
+addLazyLoadingImages = () => {
+	var lazyImages = [].slice.call(document.querySelectorAll('#lazy-img'));
+
+	if ('IntersectionObserver' in window) {
+		let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+			entries.forEach(function(entry) {
+				if (entry.isIntersecting) {
+					let lazyImage = entry.target;
+					lazyImage.src = lazyImage.dataset.src;
+					lazyImage.removeAttribute('id');
+					lazyImageObserver.unobserve(lazyImage);
+				}
+			});
+		});
+
+		lazyImages.forEach(function(lazyImage) {
+			lazyImageObserver.observe(lazyImage);
+		});
+	} else {
+		// Possibly fall back to a more compatible method here
+	}
+};
+
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
@@ -61,6 +84,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	openDB();
 	fetchNeighborhoods();
 	fetchCuisines();
+	// addLazyLoadingImages();
 });
 
 /**
@@ -183,6 +207,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 	restaurants.forEach((restaurant) => {
 		ul.append(createRestaurantHTML(restaurant));
 	});
+	addLazyLoadingImages();
 	addMarkersToMap();
 };
 
@@ -192,9 +217,37 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
 	const li = document.createElement('li');
 
+	const favoriteCheckbox = document.createElement('input');
+	favoriteCheckbox.id = `favorite-checkbox-${restaurant.id}`;
+	favoriteCheckbox.type = 'checkbox';
+	favoriteCheckbox.addEventListener('change', function() {
+		let isFavorite = this.checked;
+
+		fetch(`http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=${isFavorite}`, {
+			method: 'put'
+		}).then(() => {
+			const favoriteDisplay = document.querySelector(`#favorite-display-${restaurant.id}`);
+			favoriteDisplay.innerHTML = isFavorite ? 'is favorite' : 'is not favorite';
+		});
+	});
+
+	const favoriteDisplay = document.createElement('label');
+	favoriteDisplay.htmlFor = `favorite-checkbox-${restaurant.id}`;
+	favoriteDisplay.id = `favorite-display-${restaurant.id}`;
+	favoriteDisplay.innerHTML = restaurant.is_favorite ? 'is favorite' : 'is not favorite';
+
+	const favoriteContainer = document.createElement('div');
+	favoriteContainer.id = `favorite-container-${restaurant.id}`;
+
+	favoriteContainer.appendChild(favoriteCheckbox);
+	favoriteContainer.appendChild(favoriteDisplay);
+	li.append(favoriteContainer);
+
 	const image = document.createElement('img');
 	image.className = 'restaurant-img';
-	image.src = DBHelper.imageUrlForRestaurant(restaurant);
+	image.id = 'lazy-img';
+	image.src = '/img/placeholder.webp';
+	image.dataset.src = DBHelper.imageUrlForRestaurant(restaurant);
 	image.alt = restaurant.name;
 	li.append(image);
 
