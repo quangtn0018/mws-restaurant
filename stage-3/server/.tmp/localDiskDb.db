@@ -433,17 +433,7 @@
         "id": 10
       }
     ],
-    "reviews": [
-      {
-        "restaurant_id": "2",
-        "name": "4324",
-        "rating": "3",
-        "comment": "qweqeqewq",
-        "createdAt": "2018-05-22T02:49:42.683Z",
-        "updatedAt": "2018-05-22T02:49:42.683Z",
-        "id": 1
-      }
-    ]
+    "reviews": []
   },
   "schema": {
     "restaurant": {
@@ -497,7 +487,7 @@
       "id": 10
     },
     "reviews": {
-      "id": 1
+      "id": 0
     }
   }
 }
