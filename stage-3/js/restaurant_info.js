@@ -13,27 +13,36 @@ window.addEventListener('offline', updateOnlineStatus);
 
 document.addEventListener('DOMContentLoaded', (event) => {
 	updateOnlineStatus();
-});
-
-/**
- * Initialize Google map, called from HTML.
- */
-window.initMap = () => {
 	fetchRestaurantFromURL((error, restaurant) => {
 		if (error) {
 			// Got an error!
 			console.error(error);
 		} else {
-			self.map = new google.maps.Map(document.getElementById('map'), {
-				zoom: 16,
-				center: restaurant.latlng,
-				scrollwheel: false
-			});
 			fillBreadcrumb();
 			DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
 		}
 	});
-};
+});
+
+/**
+ * Initialize Google map, called from HTML.
+ */
+// window.initMap = () => {
+// 	fetchRestaurantFromURL((error, restaurant) => {
+// 		if (error) {
+// 			// Got an error!
+// 			console.error(error);
+// 		} else {
+// 			self.map = new google.maps.Map(document.getElementById('map'), {
+// 				zoom: 16,
+// 				center: restaurant.latlng,
+// 				scrollwheel: false
+// 			});
+// 			fillBreadcrumb();
+// 			DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+// 		}
+// 	});
+// };
 
 /**
  * Get current restaurant from page URL.
@@ -66,8 +75,44 @@ fetchRestaurantFromURL = (callback) => {
  * Create restaurant HTML and add it to the webpage
  */
 fillRestaurantHTML = (restaurant = self.restaurant) => {
+	const restaurantContainer = document.getElementById('restaurant-container');
+
+	const favoriteDisplay = document.createElement('label');
+	favoriteDisplay.htmlFor = `favorite-checkbox-${restaurant.id}`;
+	favoriteDisplay.id = `favorite-display-${restaurant.id}`;
+	favoriteDisplay.innerHTML = restaurant.is_favorite ? 'is favorite' : 'is not favorite';
+
+	const starUnicode = document.createElement('span');
+	starUnicode.innerHTML = restaurant.is_favorite ? '&#x2605' : '';
+
+	const favoriteCheckbox = document.createElement('input');
+	favoriteCheckbox.id = `favorite-checkbox-${restaurant.id}`;
+	favoriteCheckbox.type = 'checkbox';
+	favoriteCheckbox.checked = restaurant.is_favorite;
+	favoriteCheckbox.addEventListener('change', function() {
+		let isFavorite = this.checked;
+
+		fetch(`http://localhost:1337/restaurants/${restaurant.id}/?is_favorite=${isFavorite}`, {
+			method: 'put'
+		}).then(() => {
+			const favoriteDisplay = document.querySelector(`#favorite-display-${restaurant.id}`);
+			favoriteDisplay.innerHTML = isFavorite ? 'is favorite' : 'is not favorite';
+			starUnicode.innerHTML = isFavorite ? '&#x2605' : '';
+			DBHelper.updateFavorites(restaurant.id, isFavorite);
+		});
+	});
+
+	const favoriteContainer = document.createElement('div');
+	favoriteContainer.id = `favorite-container-${restaurant.id}`;
+
+	favoriteContainer.appendChild(favoriteCheckbox);
+	favoriteContainer.appendChild(favoriteDisplay);
+	favoriteContainer.appendChild(starUnicode);
+
 	const name = document.getElementById('restaurant-name');
 	name.innerHTML = restaurant.name;
+
+	restaurantContainer.insertBefore(favoriteContainer, name);
 
 	const address = document.getElementById('restaurant-address');
 	address.innerHTML = restaurant.address;
@@ -227,4 +272,26 @@ postComment = (id = self.restaurant.id) => {
 		DBHelper.clearDB();
 		window.location.href = `http://localhost:3000/restaurant.html?id=${id}`;
 	});
+};
+
+initMap = () => {
+	fetchRestaurantFromURL((error, restaurant) => {
+		if (error) {
+			// Got an error!
+			console.error(error);
+		} else {
+			self.map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 16,
+				center: restaurant.latlng,
+				scrollwheel: false
+			});
+			fillBreadcrumb();
+			DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+		}
+	});
+};
+
+loadMapOnClick = (event) => {
+	event.preventDefault();
+	initMap();
 };

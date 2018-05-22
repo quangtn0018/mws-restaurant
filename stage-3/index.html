@@ -18,11 +18,13 @@
     <nav>
       <h3 id="connection-status"></h3>
       <h1><a href="/">Restaurant Reviews</a></h1>
+      <button type="button" role="button" id="load-live-map" onclick="loadMapOnClick(event)">Load Live Map</button>
     </nav>
   </header>
 
   <main id="maincontent">
     <section id="map-container">
+      <!-- <img id"static-map" src="https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&zoom=12&size=1500x400" alt="Google Maps Static Map" aria-label="Google Maps Static Map"> -->
       <div id="map" role="application" aria-label="Map with restaurants markers"></div>
     </section>
     <section>
@@ -39,11 +41,12 @@
     </section>
   </main>
   
-  <!-- <script type="application/javascript" charset="utf-8" src="js/dbhelper-minified.js"></script> -->
-  <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-  <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
+  <!-- <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
+  <script type="application/javascript" charset="utf-8" src="js/main.js"></script> -->
+  <script type="application/javascript" charset="utf-8" src="js/dbhelper-main-minified.js"></script>
   <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtQNoeWMkxi50vJp3FOOFKDp2G-knG2wM&libraries=places&callback=initMap"></script> -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"></script>
+  <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"></script> -->
+  <script src="https://maps.googleapis.com/maps/api/js"></script>
 
 
   <footer id="footer">

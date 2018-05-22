@@ -70,6 +70,12 @@ section {
 	text-transform: uppercase;
 }
 /* ====================== Navigation ====================== */
+#load-live-map {
+	height: 30px;
+	align-self: center;
+	cursor: pointer;
+}
+
 #connection-status {
 	color: white;
 	align-self: center;

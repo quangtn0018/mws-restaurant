@@ -1,5 +1,24 @@
 # Mobile Web Specialist Certification Course
 ---
+# Stage-3
+## Get Started
+```
+cd stage-3/
+npm i
+
+// to serve on localhost:3000
+gulp
+```
+
+### Running server
+```
+cd server/
+npm i
+
+// serve on localhost:1337
+node server
+```
+
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
 ## Project Overview: Stage 1

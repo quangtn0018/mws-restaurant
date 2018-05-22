@@ -64,6 +64,33 @@ class DBHelper {
 		};
 	}
 
+	static updateFavorites(restaurantId, isFavorite = false) {
+		let request = window.indexedDB.open('restaurant-review-db', 1);
+
+		request.onsuccess = (event) => {
+			var db = event.target.result;
+			var tx = db.transaction('keyval', 'readwrite');
+			var keyValStore = tx.objectStore('keyval');
+
+			keyValStore.get('restaurants').onsuccess = function(event) {
+				if (!event.target.result) {
+					console.error('data not in DB');
+				} else {
+					let restaurants = event.target.result;
+
+					const index = parseInt(restaurantId) - 1;
+					restaurants[index].is_favorite = isFavorite;
+
+					keyValStore.put(restaurants, 'restaurants');
+				}
+			};
+		};
+
+		request.onerror = function(event) {
+			console.log('failed to open indexedDB in addToDB');
+		};
+	}
+
 	static addToDBOffline(review) {
 		let request = window.indexedDB.open('restaurant-review-db', 1);
 

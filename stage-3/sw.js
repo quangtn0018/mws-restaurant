@@ -1,4 +1,4 @@
-importScripts('./js/idb.js');
+importScripts('./js/idb-minified.js');
 
 var staticCacheName = 'restaurant-reviews-v1';
 var urlsToCache = [
@@ -19,7 +19,9 @@ var urlsToCache = [
 	'/img/placeholder.webp',
 	'/js/dbhelper.js',
 	'/js/main.js',
-	'/js/restaurant_info.js'
+	'/js/restaurant_info.js',
+	'/js/dbhelper-restaurant_info-minified.js',
+	'/js/dbhelper-main-minified.js'
 ];
 
 self.addEventListener('install', (event) => {
